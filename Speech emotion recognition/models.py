@@ -107,17 +107,15 @@ class CnnNetwork(Network):
 
 class NetworksFactory:
     def __init__(self, X, y):
-        self.X = X
-        self.y = y
-
-    def get_network(self, network_name):
-        networks = {
-            "Feedforward": FeedforwardNetwork(self.X, self.y, keras.optimizers.Adam(learning_rate=0.00001),
+        self.networks = {
+            "Feedforward": FeedforwardNetwork(X, y, keras.optimizers.Adam(learning_rate=0.00001),
                                               (40, 1), 'sparse_categorical_crossentropy'),
-            "Lstm": LstmNetwork(self.X, self.y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
-            "Lstm2": LstmNetwork2(self.X, self.y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
-            "Lstm3": LstmNetwork3(self.X, self.y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
-            "Cnn": CnnNetwork(self.X, self.y, keras.optimizers.Adam(learning_rate=0.001), (40, 130, 1),
+            "Lstm": LstmNetwork(X, y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
+            "Lstm2": LstmNetwork2(X, y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
+            "Lstm3": LstmNetwork3(X, y, 'adam', (40, 1), 'sparse_categorical_crossentropy'),
+            "Cnn": CnnNetwork(X, y, keras.optimizers.Adam(learning_rate=0.001), (40, 130, 1),
                               'sparse_categorical_crossentropy')
         }
-        return networks[network_name]
+
+    def get_network(self, network_name):
+        return self.networks[network_name]

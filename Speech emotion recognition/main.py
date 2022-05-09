@@ -1,11 +1,12 @@
 import json
 import numpy as np
+import os
 from models import NetworksFactory
 from skimage import transform
 from sklearn.model_selection import train_test_split
 from helper import to_one_hot_encoding, to_label_encoding
-FILE_PATH = "data"
-CNN_DATA_FILE_PATH = "cnn_data"
+TRAINING_DATA_PATH = os.environ["TRAINING_DATA"]
+CNN_TRAINING_DATA_PATH = os.environ["CNN_TRAINING_DATA"]
 CNN_TRANSFORM_SIZE = [40, 130]
 
 
@@ -34,13 +35,13 @@ def load_data_for_cnn(file_path):
 
 
 def main():
-    X, y = load_data(FILE_PATH)
+    X, y = load_data(TRAINING_DATA_PATH)
     X, X_test, y, y_test = train_test_split(X, y, test_size=0.05, random_state=42)
     network_factory = NetworksFactory(X, y)
     y_test = to_label_encoding(y_test)
 
-    #network = network_factory.get_network("Feedforward")
-    #network.fit(200, 64, 0.1)
+    network = network_factory.get_network("Feedforward")
+    network.fit(200, 64, 0.1)
 
     #network = network_factory.get_network("Lstm")
     #network.fit(20, 64, 0.1)
@@ -51,7 +52,7 @@ def main():
     #network = network_factory.get_network("Lstm3")
     #network.fit(20,64,0.1)
 
-    X, y = load_data_for_cnn(CNN_DATA_FILE_PATH)
+    X, y = load_data_for_cnn(CNN_TRAINING_DATA_PATH)
     X, X_test, y, y_test = train_test_split(X, y, test_size=0.05, random_state=42)
     network_factory = NetworksFactory(X, y)
     y_test = to_label_encoding(y_test)
