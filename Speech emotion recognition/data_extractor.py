@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import json
 import numpy as np
 
-FILES_PATH = os.environ['RECORDINGS_PATH']
+FILES_PATH = os.environ.get('RECORDINGS_PATH', 'Emotions')
 TRAINING_DATA_FILE_NAME = 'training_data'
 CNN_TRAINING_DATA_FILE_NAME = 'cnn_training_data'
 N_MFCC = 40

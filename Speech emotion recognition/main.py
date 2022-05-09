@@ -5,8 +5,8 @@ from models import NetworksFactory
 from skimage import transform
 from sklearn.model_selection import train_test_split
 from helper import to_one_hot_encoding, to_label_encoding
-TRAINING_DATA_PATH = os.environ["TRAINING_DATA"]
-CNN_TRAINING_DATA_PATH = os.environ["CNN_TRAINING_DATA"]
+TRAINING_DATA_PATH = os.environ.get("TRAINING_DATA", "training_data")
+CNN_TRAINING_DATA_PATH = os.environ.get("CNN_TRAINING_DATA", "cnn_training_data")
 CNN_TRANSFORM_SIZE = [40, 130]
 
 
