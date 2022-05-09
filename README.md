@@ -1,6 +1,6 @@
 # OverseerModel
 
-### Enviromental variables
+### Environment variables
 Remember to set the environment variables listed below:
 
  - TRAINING_DATA  -   path to training data
