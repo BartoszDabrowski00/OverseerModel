@@ -8,6 +8,7 @@ log = logging.getLogger(__name__)
 
 def convert_audio_to_text(path: str) -> Optional[str]:
     recognizer = sr.Recognizer()
+    recognizer.energy_threshold = 1
     with sr.AudioFile(path) as source:
         audio = recognizer.listen(source)
         try:
@@ -19,5 +20,3 @@ def convert_audio_to_text(path: str) -> Optional[str]:
             log.error("Speech recognition operation failed. The key isn't valid, or there is no internet connection")
 
     return None
-
-

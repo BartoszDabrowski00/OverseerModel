@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 def test(path: str) -> None:
     if not os.path.exists(path):
-        log.error("Given directory deos not exist.")
+        log.error('Given directory deos not exist.')
 
     sa = SentimentIntensityAnalyzer()
     file_paths = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
@@ -19,6 +19,7 @@ def test(path: str) -> None:
         if text is None:
             continue
         emotions_distribution = sa.polarity_scores(text)
+        print(f'TEXT: {text}')
         print_all_emotions_distribution(file, emotions_distribution)
 
 
