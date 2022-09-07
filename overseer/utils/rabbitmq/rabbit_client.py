@@ -1,6 +1,10 @@
+import logging
+
 from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 
 from overseer.utils.config.config import Config
+
+log = logging.getLogger(__name__)
 
 
 class RabbitClient:
@@ -21,17 +25,18 @@ class RabbitClient:
         self.channel = self.connection.channel()
 
         self.declare_amqp()
-        self.start_consuming()
+        log.info('Initialized rabbitmq client')
 
     def declare_amqp(self) -> None:
+        log.info(f'Declaring exchange {self.recordings_exchange}')
         self.channel.exchange_declare(exchange=self.recordings_exchange,
                                       durable=True,
                                       exchange_type=self.recordings_exchange_type)
 
+        log.info(f'Declaring queue {self.recordings_new_queue} with type {self.recordings_new_queue_type}')
         self.channel.queue_declare(queue=self.recordings_new_queue, durable=True,
                                    arguments={'x-queue-type': self.recordings_new_queue_type})
 
+        log.info(
+            f'Binding queue {self.recordings_new_queue} to exchange {self.recordings_exchange} with routing key {self.recordings_route}')
         self.channel.queue_bind(self.recordings_new_queue, self.recordings_exchange, routing_key=self.recordings_route)
-
-    def start_consuming(self):
-        pass
