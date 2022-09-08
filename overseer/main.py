@@ -1,13 +1,16 @@
+import logging
+from overseer.recordings_processor import RecordingsProcessor
 from overseer.utils.config.config import Config
-from overseer.utils.mongo.mongo_client import MongoClient
-from overseer.utils.rabbitmq.rabbit_client import RabbitClient
+
+log = logging.getLogger(__name__)
 
 
 def main():
     cfg = Config()
-    mongo_client = MongoClient()
-    rabbit_client = RabbitClient()
+    processor = RecordingsProcessor(cfg)
+    processor.process_messages()
 
 
 if __name__ == '__main__':
+    log.info('Starting overseer model')
     main()
