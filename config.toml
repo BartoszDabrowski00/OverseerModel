@@ -1,5 +1,5 @@
 [mongo]
-connection_string="mongodb://localhost:27017"
+connection_string="mongodb://mongo:27017"
 username="root"
 password="root"
 overseer_db="overseer"
@@ -7,7 +7,7 @@ overseer_recordings_collection="overseer_recordings"
 
 
 [amqp]
-host="localhost"
+host="rabbitmq"
 port="5672"
 username="guest"
 password="guest"
