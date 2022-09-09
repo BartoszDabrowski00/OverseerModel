@@ -1,6 +1,8 @@
 import logging
+import os
 
 from pika import BlockingConnection, ConnectionParameters, PlainCredentials
+from retry import retry
 
 from overseer.utils.config.config import Config
 
@@ -11,12 +13,7 @@ class RabbitClient:
     config = Config()
 
     def __init__(self) -> None:
-        self.connection = BlockingConnection(ConnectionParameters(
-            host=self.config.get("amqp", "host"),
-            port=self.config.get("amqp", "port"),
-            virtual_host=self.config.get("amqp", "vhost"),
-            credentials=PlainCredentials(self.config.get("amqp", "username"), self.config.get("amqp", "password"))
-        ))
+        self.connection = self.connect_to_rabbti()
         self.recordings_exchange = self.config.get("amqp", "recordings_exchange")
         self.recordings_exchange_type = self.config.get("amqp", "recordings_exchange_type")
         self.recordings_route = self.config.get("amqp", "recordings_route")
@@ -25,7 +22,18 @@ class RabbitClient:
         self.channel = self.connection.channel()
 
         self.declare_amqp()
-        log.info('Initialized rabbitmq client')
+
+    @retry(tries=5, delay=2)
+    def connect_to_rabbti(self):
+        host = os.getenv("RABBIT_HOST", self.config.get("amqp", "host"))
+        log.info(f'Connecting to rabbit on host {host}')
+
+        return BlockingConnection(ConnectionParameters(
+            host=host,
+            port=self.config.get("amqp", "port"),
+            virtual_host=self.config.get("amqp", "vhost"),
+            credentials=PlainCredentials(self.config.get("amqp", "username"), self.config.get("amqp", "password"))
+        ))
 
     def declare_amqp(self) -> None:
         log.info(f'Declaring exchange {self.recordings_exchange}')

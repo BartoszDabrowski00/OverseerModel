@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Optional
 
 from bson import ObjectId
@@ -13,7 +14,7 @@ log = logging.getLogger(__name__)
 class MongoClient:
     config = Config()
     client: Optional[Client] = None
-    connection_string = config.get('mongo', 'connection_string')
+    connection_string = os.getenv('MONGO_HOST', config.get('mongo', 'connection_string'))
     username = config.get('mongo', 'username')
     password = config.get('mongo', 'password')
     overseer_db = config.get('mongo', 'overseer_db')
