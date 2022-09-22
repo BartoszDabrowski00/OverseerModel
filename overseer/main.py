@@ -12,5 +12,7 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.NOTSET)
+    logging.getLogger('pika').setLevel(logging.WARNING)
     log.info('Starting overseer model')
     main()
