@@ -7,7 +7,7 @@ from overseer.vader_emotion_recognition.audio_converter import AudioToTextConver
 log = logging.getLogger(__name__)
 
 
-class TextNotConverterException(Exception):
+class TextNotConvertedException(Exception):
     pass
 
 
@@ -19,9 +19,12 @@ class VaderClassifier:
         log.info('Initialized vader classifier')
 
     def get_emotions_distribution(self, audio):
-        text = self.audio_converter.convert_audio_to_text(audio)
-        if text is None:
-            raise TextNotConverterException()
+        try:
+            text = self.audio_converter.convert_audio_to_text(audio)
+            if text is None:
+                raise TextNotConvertedException()
+        except Exception as e:
+            raise TextNotConvertedException(e)
 
         emotions_distribution = self.sa.polarity_scores(text)
         log.info('Successfully extracted emotions from audio')

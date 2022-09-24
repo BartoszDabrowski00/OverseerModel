@@ -8,14 +8,16 @@ log = logging.getLogger(__name__)
 
 class AudioToTextConverter:
 
+    def __init__(self):
+        self.recognizer = sr.Recognizer()
+        self.recognizer.energy_threshold = 1
+
     def convert_audio_to_text(self, data: str) -> Optional[str]:
         log.info('Converting audio to text')
-        recognizer = sr.Recognizer()
-        recognizer.energy_threshold = 1
         with sr.AudioFile(data) as source:
-            audio = recognizer.listen(source)
+            audio = self.recognizer.listen(source)
             try:
-                text = recognizer.recognize_google(audio)
+                text = self.recognizer.recognize_google(audio)
                 return text
             except sr.UnknownValueError:
                 log.error("The speech is unintelligible")
